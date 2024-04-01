@@ -1,0 +1,30 @@
+{
+    "name": "web-large-model-demo",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build --config vite.build.config.js",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@megvii-icons/vue-svg-icons": "^1.0.13",
+        "axios": "^1.6.2",
+        "meg-ui": "2.1.18",
+        "sass": "1.53.0",
+        "vue": "2.6.12",
+        "vue-router": "3.6.0",
+        "vuex": "3.6.0"
+    },
+    "devDependencies": {
+        "vite": "^3.2.3",
+        "vite-plugin-mock": "2.9.6",
+        "vite-plugin-require-transform": "1.0.3",
+        "vite-plugin-vue2": "2.0.2",
+        "vue-template-compiler": "^2.6.12"
+    },
+    "engines": {
+        "node": ">=16"
+    }
+}
