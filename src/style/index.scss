@@ -1,0 +1,19 @@
+// 全局样式
+//meg-ui
+@import 'meg-ui/lib/theme/index.css';
+// 重置样式
+@import "./reset.scss";
+
+@font-face {
+    font-family: "D-DIN";
+    src: url("./font/D-DIN.otf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "DIN-Condensed";
+    src: url("./font/DIN-Condensed-Bold.ttf");
+    font-weight: normal;
+    font-style: normal;
+}

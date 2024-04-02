@@ -1,0 +1,96 @@
+.home-wrapper {
+    min-width: 1366px;
+    height: 100vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    background-color: #f0f6ff;
+
+    .home-header {
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .left {
+            display: flex;
+            align-items: center;
+
+            .title {
+                margin: 0 12px 0 20px;
+                font-size: 20px;
+                font-family: DingTalk-JinBuTi;
+                color: #303133;
+            }
+
+            .info {
+                font-size: 12px;
+                font-family: PingFangSC-Regular;
+                color: #181725;
+            }
+        }
+
+        .right {
+            .user-img {
+                width: 32px;
+                height: 32px;
+                padding: 6px;
+                margin-right: 20px;
+                background: #ffffff;
+                border-radius: 8px;
+            }
+        }
+    }
+
+    .home-body {
+        height: calc(100vh - 56px);
+        display: flex;
+
+        .left {
+            height: 100%;
+            width: 280px;
+            padding: 20px;
+            overflow-y: auto;
+
+            .title {
+                margin-bottom: 20px;
+                font-family: PingFangSC-Medium;
+                font-size: 16px;
+                color: #303133;
+                font-weight: 500;
+            }
+
+            .search-icon {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        .right {
+            flex: 1;
+
+            .upload-content {
+                height: 110px;
+                padding: 12px 24px 24px 24px;
+                margin-right: 20px;
+                border-radius: 12px;
+                background-color: #ffffff;
+
+                .title {
+                    font-family: PingFangSC-Medium;
+                    font-size: 14px;
+                    color: #2F3033;
+                    font-weight: 500;
+                }
+            }
+
+            .chat-content {
+                // 56+110+16 = 182
+                height: calc(100vh - 182px);
+                margin-top: 12px;
+                margin-right: 20px;
+                border-radius: 12px 12px 0 0;
+                background-color: #ffffff;
+            }
+        }
+    }
+}
