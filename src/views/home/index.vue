@@ -24,7 +24,9 @@
                     <div class="title">选择监管文件</div>
                     <FileUpload />
                 </div>
-                <div class="chat-content">222</div>
+                <div class="chat-content">
+                    <ChatBox />
+                </div>
             </div>
         </div>
     </div>
@@ -32,9 +34,12 @@
 
 <script>
 import FileUpload from './components/fileUpload';
+import ChatBox from './components/chatBox';
+
 export default {
     components: {
-        FileUpload
+        FileUpload,
+        ChatBox
     },
     data() {
         return {
