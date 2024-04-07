@@ -34,7 +34,7 @@
 
 <script>
 import FileUpload from './components/fileUpload';
-import ChatBox from './components/chatBox';
+import ChatBox from './components/chatBox'
 
 export default {
     components: {

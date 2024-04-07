@@ -11,7 +11,8 @@
                 </div>
 
                 <div class="chat-messages-left" v-else>
-                    <img src="@/assets/robot-user.png" class="robot-avatar" alt="" />
+                    <img src="@/assets/robot-user.png"
+                                     class="robot-avatar" alt="" />
                     <div class="message-content">
                         <div v-if="message.type === 'text'" class="message-text">{{ message.content }}</div>
                         <img v-else :src="message.content" class="message-image" alt="Image" />

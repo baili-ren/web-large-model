@@ -8,6 +8,7 @@ export default defineConfig({
     resolve: {
         extensions: [".js", ".jsx", ".vue", ".json"],
         alias: {
+            'meg-ui': path.resolve(process.cwd(), 'node_modules', 'meg-ui'),
             '@': path.resolve(process.cwd(), './src'),
         },
     },
