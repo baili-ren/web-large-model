@@ -29,11 +29,12 @@
                 :style="{ height: inputHeight }"
                 v-model="currentMessage"
                 @input="adjustInputHeight"
+                @keyup.enter="sendMessage"
                 placeholder="请输入问题"
             ></textarea>
             <div class="operation">
-                <button class="send-button" @click="openFilePicker">upload</button>
-                <button class="send-button" @click="sendMessage">Send</button>
+                <img class="upload-btn" src="@/assets/photo.png" @click="openFilePicker" alt="" />
+                <img class="send-btn" src="@/assets/send.png" @click="sendMessage" alt="" />
             </div>
 
             <input ref="fileInput" type="file" style="display: none" @change="handleFileUpload" />
@@ -52,7 +53,10 @@ export default {
             messages: [
                 { content: 'Hello!', type: 'text', sender: 'other' },
                 { content: 'Hi there!', type: 'text', sender: 'me' }
-            ]
+            ],
+            editorOption: {
+                theme: 'bubble'
+            }
         };
     },
     methods: {
@@ -63,12 +67,13 @@ export default {
             this.inputHeight = input.style.height;
         },
         sendMessage() {
-            if (this.currentMessage.trim() !== '') {
+            if (this.currentMessage !== '') {
                 this.messages.push({ content: this.currentMessage, type: 'text', sender: 'me' });
                 this.messages.push({ content: '这是一个回答', type: 'text', sender: 'other' });
 
                 this.currentMessage = '';
                 setTimeout(() => this.scrollToBottom(), 100);
+                this.adjustInputHeight();
             }
         },
         openFilePicker() {
@@ -80,6 +85,8 @@ export default {
                 const reader = new FileReader();
                 reader.onload = () => {
                     this.messages.push({ content: reader.result, type: 'image', sender: 'me' });
+
+                    console.log(reader.result, 'reader.result===');
                     setTimeout(() => this.scrollToBottom(), 100);
                 };
                 reader.readAsDataURL(file);
