@@ -1,0 +1,13 @@
+name: large-model-demo
+web:
+    - name: main
+      path: /
+      cmd: nginx -g "daemon off;"
+      port:
+          - 80:80
+      liveness_probe:
+          exec:
+              cmd: echo 'ok'
+      readiness_probe:
+          exec:
+              cmd: echo 'ok'
