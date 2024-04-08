@@ -13,7 +13,12 @@
             <div class="left">
                 <div class="title">监管条例细则展示</div>
                 <meg-input placeholder="搜索历史记录">
-                    <img slot="suffix" class="search-icon" src="@/assets/search.svg" alt="" />
+                    <img
+                        slot="suffix"
+                        class="search-icon"
+                        src="@/assets/search.svg"
+                        alt=""
+                    />
                 </meg-input>
                 <div class="order-content">
                     <div class="content-item"></div>
@@ -33,24 +38,24 @@
 </template>
 
 <script>
-import FileUpload from './components/fileUpload';
-import ChatBox from './components/chatBox'
+import FileUpload from "./components/fileUpload";
+import ChatBox from "./components/chatBox";
 
 export default {
     components: {
         FileUpload,
-        ChatBox
+        ChatBox,
     },
     data() {
         return {
             file: null,
-            progress: null
+            progress: null,
         };
     },
-    methods: {}
+    methods: {},
 };
 </script>
 
 <style lang="scss" scoped>
-@import './index.scss';
+@import "./index.scss";
 </style>
