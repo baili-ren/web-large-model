@@ -2,7 +2,9 @@
     <div class="chat-box-wrapper">
         <div class="chat-messages">
             <div v-for="(message, index) in messages" :key="index">
-                <div class="chat-messages-right" v-if="message.sender === 'me'">
+                <!-- 提问 -->
+                <div class="chat-messages-user" v-if="message.sender === 'me'">
+                    <img src="@/assets/user.png" class="user-avatar" alt="" />
                     <div class="message-content">
                         <div
                             v-if="message.type === 'text'"
@@ -17,10 +19,10 @@
                             alt="Image"
                         />
                     </div>
-                    <img src="@/assets/user.png" class="user-avatar" alt="" />
                 </div>
 
-                <div class="chat-messages-left" v-else>
+                <!-- 回答 -->
+                <div class="chat-messages-robot" v-else>
                     <img
                         src="@/assets/robot-user.png"
                         class="robot-avatar"
@@ -34,11 +36,12 @@
                             {{ message.content }}
                         </div>
                         <img
-                            v-else
+                            v-if="message.type === 'image'"
                             :src="message.content"
                             class="message-image"
                             alt="Image"
                         />
+                        <AnswerChart v-if="message.type === 'chart'" />
                     </div>
                 </div>
             </div>
@@ -82,7 +85,11 @@
 </template>
 
 <script>
+import AnswerChart from "../answerChart";
 export default {
+    components: {
+        AnswerChart,
+    },
     data() {
         return {
             currentMessage: "",
@@ -90,8 +97,9 @@ export default {
             maxHeight: "150px", // 最大高度
             inputHeight: "50px", // 初始高度
             messages: [
-                { content: "Hello!", type: "text", sender: "other" },
-                { content: "Hi there!", type: "text", sender: "me" },
+                // type: text , image, chart
+                { content: "Hello", type: "text", sender: "me" },
+                { content: "Hi,there!", type: "text", sender: "other" },
             ],
             editorOption: {
                 theme: "bubble",
@@ -109,10 +117,16 @@ export default {
         sendMessage() {
             if (this.currentMessage !== "") {
                 this.messages.push({
-                    content: this.currentMessage,
+                    content: this.currentMessage.trim(),
                     type: "text",
                     sender: "me",
                 });
+                // this.messages.push({
+                //     content: "",
+                //     type: "chart",
+                //     sender: "other",
+                // });
+
                 this.messages.push({
                     content: "这是一个回答",
                     type: "text",
@@ -120,8 +134,8 @@ export default {
                 });
 
                 this.currentMessage = "";
+                this.inputHeight = "50px";
                 setTimeout(() => this.scrollToBottom(), 100);
-                this.adjustInputHeight();
             }
         },
         openFilePicker() {

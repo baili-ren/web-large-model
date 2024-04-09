@@ -13,20 +13,31 @@
             @click="chooseFile"
             >选择文件</meg-button
         >
-        <div class="file-info" v-show="showFileInfo">
-            <div class="name" :title="fileInfo.name">
-                {{ fileInfo.name }}
+        <div class="file-content">
+            <div
+                v-for="(item, index) in fileList"
+                :key="index + 'file'"
+                class="file-info"
+            >
+                <div class="name" :title="item.fileName">
+                    {{ item.fileName }}
+                </div>
+                <span class="view-btn" @click="handleDownLoadFile">查看</span>
+                <img
+                    class="close-btn"
+                    src="@/assets/close.png"
+                    alt=""
+                    @click="handleDeleteFile(index)"
+                />
+                <a
+                    :href="item.fileUrl"
+                    ref="downloadRef"
+                    target="_blank"
+                    v-show="false"
+                ></a>
             </div>
-            <span class="view-btn" @click="handleDownLoadFile">查看</span>
-            <img
-                class="close-btn"
-                src="@/assets/close.png"
-                alt=""
-                @click="handleDeleteFile"
-            />
-            <a :href="fileUrl" ref="downloadRef" v-show="false"></a>
+            <div class="progress" v-show="showProgress">{{ progress }}%</div>
         </div>
-        <div class="progress" v-show="showProgress">{{ progress }}%</div>
     </div>
 </template>
 
@@ -35,19 +46,13 @@ export default {
     data() {
         return {
             file: null,
-            fileInfo: {
-                name: null,
-                size: null,
-            },
+            fileList: [],
             fileUrl: null,
             progress: null,
             action: "https://megdesign-static-dev.mcd.megvii-inc.com/v1/common/upload", //TODO: 记得换
         };
     },
     computed: {
-        showFileInfo() {
-            return this.fileInfo.name;
-        },
         showProgress() {
             return this.progress && this.progress < 100;
         },
@@ -58,10 +63,10 @@ export default {
         },
         handleFileUpload(event) {
             this.file = event.target.files[0];
-            this.fileInfo = {
-                name: this.file.name,
-                size: (this.file.size / (1024 * 1024)).toFixed(2),
-            };
+            this.fileList.push({
+                fileName: this.file.name,
+                fileSize: (this.file.size / (1024 * 1024)).toFixed(2),
+            });
             this.uploadFile();
         },
         uploadFile() {
@@ -83,7 +88,11 @@ export default {
                 if (xhr.status === 200) {
                     let responseData = JSON.parse(xhr.responseText);
                     this.fileUrl = responseData.data.url || null;
+                    const index = this.fileList.length - 1;
+                    this.fileList[index]["fileUrl"] =
+                        responseData.data.url || null;
                     console.log("File uploaded successfully:", responseData);
+                    console.log(this.fileList, "fileList");
                 } else {
                     console.error("File upload failed");
                 }
@@ -94,11 +103,9 @@ export default {
         handleDownLoadFile() {
             this.$refs.downloadRef.dispatchEvent(new MouseEvent("click"));
         },
-        handleDeleteFile() {
-            this.fileInfo = {
-                name: null,
-                size: null,
-            };
+        handleDeleteFile(index) {
+            this.fileList.splice(index, 1);
+            console.log(this.fileList, "fileList");
         },
     },
 };
