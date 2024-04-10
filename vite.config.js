@@ -1,10 +1,17 @@
 import { defineConfig } from "vite";
 import { createVuePlugin } from "vite-plugin-vue2";
+import { viteMockServe } from 'vite-plugin-mock';
 import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [createVuePlugin()],
+    plugins: [
+        createVuePlugin(),
+        viteMockServe({
+            mockPath: 'mock',
+            supportTs: false
+        })
+    ],
     resolve: {
         extensions: [".js", ".jsx", ".vue", ".json"],
         alias: {

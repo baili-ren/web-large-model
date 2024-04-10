@@ -52,6 +52,15 @@ export default {
             progress: null,
         };
     },
+    mounted() {
+        this.$axios({
+            method: 'post',
+            url: '/web-mock/question',
+            data: {}
+        }).then(res => {
+            console.log(res)
+        })
+    },
     methods: {},
 };
 </script>
