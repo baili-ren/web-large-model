@@ -6,7 +6,10 @@
     .chat-messages {
         flex: 1;
         overflow-y: auto;
-        padding: 20px 108px;
+        padding-top: 20px;
+        padding: 20px 160px 0 108px;
+        // width: calc(100% - 268px);
+        // margin-left: 108px;
 
         &-user {
             display: flex;
@@ -24,7 +27,11 @@
             }
 
             .message-content {
-                max-width: calc(100vw - 700px);
+                // flex: 1;
+            }
+
+            .message-content-full-width {
+                flex: 1;
             }
 
             .message-text {
@@ -53,7 +60,11 @@
             }
 
             .message-content {
-                max-width: calc(100vw - 600px);
+                // flex: 1;
+            }
+
+            .message-content-full-width {
+                flex: 1;
             }
 
             .message-text {

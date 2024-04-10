@@ -28,7 +28,14 @@
                         class="robot-avatar"
                         alt=""
                     />
-                    <div class="message-content">
+                    <div
+                        class="message-content"
+                        :class="{
+                            'message-content-full-width':
+                                message.type === 'database' ||
+                                message.type === 'online',
+                        }"
+                    >
                         <div
                             v-if="message.type === 'text'"
                             class="message-text"
@@ -41,7 +48,8 @@
                             class="message-image"
                             alt="Image"
                         />
-                        <AnswerChart v-if="message.type === 'chart'" />
+                        <TemplateDatabase v-if="message.type === 'database'" />
+                        <TemplateOnline v-if="message.type === 'online'" />
                     </div>
                 </div>
             </div>
@@ -85,10 +93,13 @@
 </template>
 
 <script>
-import AnswerChart from "../answerChart";
+import TemplateDatabase from "../templateDatabase";
+import TemplateOnline from "../templateOnline";
+
 export default {
     components: {
-        AnswerChart,
+        TemplateDatabase,
+        TemplateOnline,
     },
     data() {
         return {
@@ -100,6 +111,8 @@ export default {
                 // type: text , image, chart
                 { content: "Hello", type: "text", sender: "me" },
                 { content: "Hi,there!", type: "text", sender: "other" },
+                { content: "Hi,there!", type: "database", sender: "other" },
+                { content: "Hi,there!", type: "online", sender: "other" },
             ],
             editorOption: {
                 theme: "bubble",
