@@ -42,14 +42,34 @@
                         >
                             {{ message.content }}
                         </div>
+
+                        <div
+                            v-if="message.type === 'loading'"
+                            class="message-loading"
+                        >
+                            <span class="loading-text">
+                                {{ message.content }}</span
+                            >
+                            <div class="loading-dots-box">
+                                <span class="loading-dot"></span>
+                                <span class="loading-dot"></span>
+                                <span class="loading-dot"></span>
+                            </div>
+                        </div>
                         <img
                             v-if="message.type === 'image'"
                             :src="message.content"
                             class="message-image"
                             alt="Image"
                         />
-                        <TemplateDatabase v-if="message.type === 'database'" />
-                        <TemplateOnline v-if="message.type === 'online'" />
+                        <TemplateDatabase
+                            :content="message.content"
+                            v-if="message.type === 'database'"
+                        />
+                        <TemplateOnline
+                            :content="message.content"
+                            v-if="message.type === 'online'"
+                        />
                     </div>
                 </div>
             </div>
@@ -101,6 +121,12 @@ export default {
         TemplateDatabase,
         TemplateOnline,
     },
+    props: {
+        rules: {
+            type: Array,
+            default: () => [],
+        },
+    },
     data() {
         return {
             currentMessage: "",
@@ -109,15 +135,20 @@ export default {
             inputHeight: "50px", // 初始高度
             messages: [
                 // type: text , image, chart
-                { content: "Hello", type: "text", sender: "me" },
-                { content: "Hi,there!", type: "text", sender: "other" },
-                { content: "Hi,there!", type: "database", sender: "other" },
-                { content: "Hi,there!", type: "online", sender: "other" },
+                // { content: "Hello", type: "text", sender: "me" },
+                // { content: "Hi,there!", type: "text", sender: "other" },
+                // { content: [], type: "database", sender: "other" },
+                // { content: [], type: "online", sender: "other" },
             ],
             editorOption: {
                 theme: "bubble",
             },
+            loading: false,
+            loadingDots: "",
         };
+    },
+    mounted() {
+        this.scrollToBottom();
     },
     methods: {
         adjustInputHeight() {
@@ -127,34 +158,99 @@ export default {
                 Math.min(input.scrollHeight, parseInt(this.maxHeight)) + "px";
             this.inputHeight = input.style.height;
         },
-        sendMessage() {
-            if (this.currentMessage !== "") {
-                this.messages.push({
-                    content: this.currentMessage.trim(),
-                    type: "text",
-                    sender: "me",
+        async sendMessage() {
+            if (this.currentMessage === "" || this.loading) {
+                return;
+            }
+            const currentMessage = this.currentMessage.trim();
+            this.currentMessage = "";
+            this.inputHeight = "50px";
+            setTimeout(() => this.scrollToBottom(), 100);
+
+            this.messages.push({
+                content: currentMessage,
+                type: "text",
+                sender: "me",
+            });
+
+            this.loading = true;
+            this.messages.push({
+                content: "分析中, 请稍后",
+                type: "loading",
+                sender: "other",
+            });
+
+            try {
+                const res = await this.$axios({
+                    method: "post",
+                    url: "/api",
+                    data: {
+                        origin_rules: this.rules,
+                        usr_question: currentMessage,
+                    },
                 });
-                // this.messages.push({
-                //     content: "",
-                //     type: "chart",
-                //     sender: "other",
+
+                // mock test
+                // const res = await this.$axios({
+                //     method: "post",
+                //     url: "/web-mock/question",
+                //     data: {},
                 // });
 
+                console.log(res.data, "res===");
+
+                const infos = res.data.infos || [];
+                const template = res.data.template || "text";
+                const answerText = res.data.answer || "";
+
+                let answer = {};
+
+                // 特殊场景兼容
+                if (answerText && !infos.length) {
+                    answer = {
+                        content: answerText,
+                        type: "text",
+                        sender: "other",
+                    };
+                } else {
+                    answer = {
+                        content: infos,
+                        type: template,
+                        sender: "other",
+                    };
+                }
+
+                const loadingIndex = this.messages.findIndex(
+                    (msg) => msg.type === "loading"
+                );
+                if (loadingIndex !== -1) {
+                    this.messages.splice(loadingIndex, 1, answer);
+                }
+            } catch (error) {
+                console.error("失败：", error);
+                const loadingIndex = this.messages.findIndex(
+                    (msg) => msg.type === "loading"
+                );
+                if (loadingIndex !== -1) {
+                    this.messages.splice(loadingIndex, 1);
+                }
+
                 this.messages.push({
-                    content: "这是一个回答",
+                    content: "分析失败，请重试",
                     type: "text",
                     sender: "other",
                 });
-
-                this.currentMessage = "";
-                this.inputHeight = "50px";
-                setTimeout(() => this.scrollToBottom(), 100);
+            } finally {
+                this.loading = false;
             }
         },
         openFilePicker() {
             this.$refs.fileInput.click();
         },
         handleFileUpload(event) {
+            if (this.loading) {
+                return;
+            }
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -177,9 +273,6 @@ export default {
                 block: "end",
             });
         },
-    },
-    mounted() {
-        this.scrollToBottom();
     },
 };
 </script>

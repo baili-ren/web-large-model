@@ -1,10 +1,10 @@
 <template>
     <div class="template-database-wrapper">
-        <div class="title">报告名称: XXX</div>
+        <div class="title">报告</div>
         <div class="summary-title">摘要</div>
         <div class="summary-content">
             <div class="summary-content-des">
-                一共出现XXX起违规，分布在XXX个点位中
+                {{ `一共出现${totalRules}种违规，一共${totalPoints}例` }}
             </div>
             <div class="summary-content-chart">
                 <div class="pie-chart" ref="barChartRef"></div>
@@ -57,64 +57,35 @@
 
 <script>
 import * as echarts from "echarts";
-import { BarOption, PieOption, img1 } from "./config";
+import { BarOption, PieOption } from "./config";
 import { debounce } from "lodash";
 
 export default {
+    props: {
+        content: {
+            type: Array,
+            default: () => [],
+        },
+    },
     data() {
         return {
             barChart: null,
             pieChart: null,
             // 示例数据
-            pieChartData: [
-                { name: "员工进入厨房工作时需佩戴厨师帽1", value: 1 },
-                { name: "员工进入厨房工作时需佩戴厨师帽", value: 2 },
-                { name: "工作期间不得从事与厨房无关的活动1", value: 3 },
-                { name: "工作期间不得从事与厨房无关的活动", value: 4 },
-            ],
+            totalRules: 0,
+            totalPoints: 0,
+            pieChartData: [], // {name: '', value: number}
             barChartData: {
-                categories: [
-                    "员工进入厨房工作时需佩戴厨师帽",
-                    "员工进入厨房工作时需佩戴厨师帽",
-                    "工作期间不得从事与厨房无关的活动",
-                    "工作期间不得从事与厨房无关的活动",
-                    "工作期间不得从事与厨房无关的活动",
-                    "工作期间不得从事与厨房无关的活动",
-                    "工作期间不得从事与厨房无关的活动",
-                    "工作期间不得从事与厨房无关的活动",
-                ],
-                data: [20, 30, 25, 35],
+                categories: [], //label
+                data: [], // value
             },
-            detailData: [
-                {
-                    rule_name: "员工进入厨房工作时需佩戴厨师帽",
-                    videos: [
-                        {
-                            video_name:
-                                "点位5_1.mp4点位5_1.mp4点位5_1.mp4点位5_1.mp4",
-                            frame: img1,
-                        },
-                        { video_name: "点位5_1.mp4", frame: img1 },
-                        { video_name: "点位5_1.mp4", frame: img1 },
-                        { video_name: "点位5_1.mp4", frame: img1 },
-                        { video_name: "点位5_1.mp4", frame: img1 },
-                    ],
-                },
-                {
-                    rule_name: "条例2",
-                    videos: [
-                        { video_name: "点位5_1.mp4", frame: img1 },
-                        { video_name: "点位5_1.mp4", frame: img1 },
-                        { video_name: "点位5_1.mp4", frame: img1 },
-                    ],
-                },
-            ],
-
+            detailData: [], // {rule_name: "", videos: [{video_name: "", frame: base64}]}
             showImgMask: false,
             currZooImg: "",
         };
     },
     mounted() {
+        this.initData();
         this.initChart();
         window.addEventListener("resize", this.handleResize);
     },
@@ -122,6 +93,29 @@ export default {
         window.removeEventListener("resize", this.handleResize); // 组件销毁前移除事件监听
     },
     methods: {
+        initData() {
+            this.detailData = this.content;
+            this.totalRules = this.content.length;
+            let totalPoints = 0;
+
+            let pieChartData = [];
+            let barChartData = {
+                categories: [],
+                data: [],
+            };
+            this.content.forEach((item) => {
+                totalPoints = totalPoints + item.videos.length;
+                pieChartData.push({
+                    name: item.rule_name,
+                    value: item.videos.length,
+                });
+                barChartData["categories"].push(item.rule_name);
+                barChartData["data"].push(item.videos.length);
+            });
+            this.totalPoints = totalPoints;
+            this.pieChartData = pieChartData;
+            this.barChartData = barChartData;
+        },
         initChart() {
             this.barChart = echarts.init(this.$refs.barChartRef);
             this.pieChart = echarts.init(this.$refs.pieChartRef);

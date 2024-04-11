@@ -49,7 +49,7 @@
                     <FileUpload @returnRules="returnRules" />
                 </div>
                 <div class="chat-content">
-                    <ChatBox />
+                    <ChatBox :rules="ruleList" />
                 </div>
             </div>
         </div>
@@ -68,7 +68,7 @@ export default {
     data() {
         return {
             ruleList: [],
-            searchKey: [],
+            searchKey: "",
         };
     },
     computed: {
@@ -78,24 +78,23 @@ export default {
         },
     },
     mounted() {
-        this.$axios({
-            method: "post",
-            url: "/web-mock/question",
-            data: {},
-        }).then((res) => {
-            console.log(res);
-        });
-
-        this.$axios({
-            method: "post",
-            url: "/api",
-            data: {
-                origin_rules: ["员工进入厨房工作时需佩戴厨师帽"],
-                usr_question: "今天有没有人未佩戴厨师帽",
-            },
-        }).then((res) => {
-            console.log(res);
-        });
+        // this.$axios({
+        //     method: "post",
+        //     url: "/web-mock/question",
+        //     data: {},
+        // }).then((res) => {
+        //     console.log(res);
+        // });
+        // this.$axios({
+        //     method: "post",
+        //     url: "/api",
+        //     data: {
+        //         origin_rules: ["员工进入厨房工作时需佩戴厨师帽"],
+        //         usr_question: "今天有没有人未佩戴厨师帽",
+        //     },
+        // }).then((res) => {
+        //     console.log(res);
+        // });
     },
     methods: {
         returnRules(res) {

@@ -1,8 +1,11 @@
 <template>
     <div class="template-database-wrapper">
-        <div class="title">一共出现XXX起违规，分布在XX个点位中。</div>
+        <div class="title">您的问题在线查询结果如下：</div>
+        <div class="title">
+            {{ `一共出现${totalRules}种违规，一共${totalPoints}例` }}
+        </div>
 
-        <div class="detail-title">违规详情</div>
+        <div v-show="detailData.length" class="detail-title">违规详情</div>
         <div
             v-for="(item, index) in detailData"
             :key="index + 'detail'"
@@ -48,39 +51,36 @@
 <script>
 import { img1 } from "./config";
 export default {
+    props: {
+        content: {
+            type: Array,
+            default: () => [],
+        },
+    },
     data() {
         return {
-            detailData: [
-                {
-                    rule_name: "员工进入厨房工作时需佩戴厨师帽",
-                    videos: [
-                        {
-                            video_name:
-                                "点位5_1.mp4点位5_1.mp4点位5_1.mp4点位5_1.mp4",
-                            frame: img1,
-                        },
-                        { video_name: "点位5_1.mp4", frame: img1 },
-                        { video_name: "点位5_1.mp4", frame: img1 },
-                        { video_name: "点位5_1.mp4", frame: img1 },
-                        { video_name: "点位5_1.mp4", frame: img1 },
-                    ],
-                },
-                {
-                    rule_name: "条例2",
-                    videos: [
-                        { video_name: "点位5_1.mp4", frame: img1 },
-                        { video_name: "点位5_1.mp4", frame: img1 },
-                        { video_name: "点位5_1.mp4", frame: img1 },
-                    ],
-                },
-            ],
+            detailData: [],
+            totalRules: 0,
+            totalPoints: 0,
 
             showImgMask: false,
             currZooImg: "",
         };
     },
-    mounted() {},
+    mounted() {
+        this.initData();
+    },
     methods: {
+        initData() {
+            this.detailData = this.content;
+            this.totalRules = this.content.length;
+
+            let totalPoints = 0;
+            this.content.forEach((item) => {
+                totalPoints = totalPoints + item.videos.length;
+            });
+            this.totalPoints = totalPoints;
+        },
         handleZoomImg(img) {
             this.showImgMask = true;
             this.currZooImg = img;
