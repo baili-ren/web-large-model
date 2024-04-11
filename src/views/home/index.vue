@@ -12,22 +12,41 @@
         <div class="home-body">
             <div class="left">
                 <div class="title">监管条例细则展示</div>
-                <meg-input placeholder="搜索历史记录">
+                <meg-input
+                    v-model="searchKey"
+                    placeholder="搜索历史记录"
+                    @pressEnter="handleSearch"
+                >
                     <img
                         slot="suffix"
                         class="search-icon"
                         src="@/assets/search.svg"
                         alt=""
+                        @click="handleSearch"
                     />
                 </meg-input>
-                <div class="order-content">
-                    <div class="content-item"></div>
+                <div class="rules-content">
+                    <div
+                        v-for="(item, index) in ruleList"
+                        :key="index + 'rule'"
+                        class="content-item"
+                        :title="item"
+                    >
+                        <img class="pre-icon" src="@/assets/chat.png" alt="" />
+                        <span class="label">{{ item }}</span>
+                        <img
+                            class="suffix-icon"
+                            src="@/assets/close.png"
+                            alt=""
+                            @click="handleRemoveRule(index)"
+                        />
+                    </div>
                 </div>
             </div>
             <div class="right">
                 <div class="upload-content">
                     <div class="title">选择监管文件</div>
-                    <FileUpload />
+                    <FileUpload @returnRules="returnRules" />
                 </div>
                 <div class="chat-content">
                     <ChatBox />
@@ -48,20 +67,48 @@ export default {
     },
     data() {
         return {
-            file: null,
-            progress: null,
+            ruleList: [],
+            searchKey: [],
         };
+    },
+    computed: {
+        // TODO: 重新上传文件后，条例
+        fliterRules() {
+            return this.ruleList;
+        },
     },
     mounted() {
         this.$axios({
-            method: 'post',
-            url: '/web-mock/question',
-            data: {}
-        }).then(res => {
-            console.log(res)
-        })
+            method: "post",
+            url: "/web-mock/question",
+            data: {},
+        }).then((res) => {
+            console.log(res);
+        });
+
+        this.$axios({
+            method: "post",
+            url: "/api",
+            data: {
+                origin_rules: ["员工进入厨房工作时需佩戴厨师帽"],
+                usr_question: "今天有没有人未佩戴厨师帽",
+            },
+        }).then((res) => {
+            console.log(res);
+        });
     },
-    methods: {},
+    methods: {
+        returnRules(res) {
+            this.ruleList = res;
+        },
+        handleRemoveRule(index) {
+            this.ruleList.splice(index, 1);
+        },
+
+        handleSearch() {
+            console.log(this.searchKey, "key===");
+        },
+    },
 };
 </script>
 

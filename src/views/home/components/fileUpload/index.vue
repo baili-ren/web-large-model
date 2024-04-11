@@ -42,10 +42,11 @@
 </template>
 
 <script>
+import { fileNameMap } from "@/constants/enums";
 export default {
     data() {
         return {
-            file: null,
+            // file: null,
             fileList: [],
             fileUrl: null,
             progress: null,
@@ -62,16 +63,18 @@ export default {
             this.$refs.fileInput.click();
         },
         handleFileUpload(event) {
-            this.file = event.target.files[0];
+            const file = event.target.files[0];
+            event.target.value = "";
             this.fileList.push({
-                fileName: this.file.name,
-                fileSize: (this.file.size / (1024 * 1024)).toFixed(2),
+                fileName: file.name,
+                fileSize: (file.size / (1024 * 1024)).toFixed(2),
             });
-            this.uploadFile();
+            this.updateRules();
+            this.uploadFile(file);
         },
-        uploadFile() {
+        uploadFile(file) {
             let formData = new FormData();
-            formData.append("file", this.file);
+            formData.append("file", file);
 
             let xhr = new XMLHttpRequest();
             xhr.open("POST", this.action, true);
@@ -92,7 +95,6 @@ export default {
                     this.fileList[index]["fileUrl"] =
                         responseData.data.url || null;
                     console.log("File uploaded successfully:", responseData);
-                    console.log(this.fileList, "fileList");
                 } else {
                     console.error("File upload failed");
                 }
@@ -105,7 +107,16 @@ export default {
         },
         handleDeleteFile(index) {
             this.fileList.splice(index, 1);
-            console.log(this.fileList, "fileList");
+            this.updateRules();
+        },
+
+        updateRules() {
+            let rules = [];
+            this.fileList.forEach((item) => {
+                const arr = fileNameMap[item.fileName] || [];
+                rules = rules.concat(arr);
+            });
+            this.$emit("returnRules", rules);
         },
     },
 };

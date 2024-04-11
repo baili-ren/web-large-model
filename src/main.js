@@ -4,7 +4,7 @@ import router from "./router/index";
 import store from './store/index';
 // import VueSvgIcons from "@megvii-icons/vue-svg-icons";
 import MegUI from "meg-ui";
-import inject from './inject';
+import inject from '@/utils/inject';
 import "@/style/index.scss";
 
 Vue.use(MegUI);
