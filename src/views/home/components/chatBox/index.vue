@@ -194,7 +194,10 @@ export default {
                 // const res = await this.$axios({
                 //     method: "post",
                 //     url: "/web-mock/question",
-                //     data: {},
+                //     data: {
+                //         origin_rules: this.rules,
+                //         usr_question: currentMessage,
+                //     },
                 // });
 
                 console.log(res.data, "res===");

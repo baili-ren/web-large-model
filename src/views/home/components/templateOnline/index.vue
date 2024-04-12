@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import { img1 } from "./config";
 export default {
     props: {
         content: {
