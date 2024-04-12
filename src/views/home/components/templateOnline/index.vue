@@ -73,12 +73,16 @@ export default {
     methods: {
         initData() {
             this.detailData = this.content;
-            this.totalRules = this.content.length;
 
+            let totalRules = 0;
             let totalPoints = 0;
             this.content.forEach((item) => {
+                if (item.videos.length) {
+                    totalRules++;
+                }
                 totalPoints = totalPoints + item.videos.length;
             });
+            this.totalRules = totalRules;
             this.totalPoints = totalPoints;
         },
         handleZoomImg(img) {

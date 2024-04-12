@@ -95,7 +95,7 @@ export default {
     methods: {
         initData() {
             this.detailData = this.content;
-            this.totalRules = this.content.length;
+            let totalRules = 0;
             let totalPoints = 0;
 
             let pieChartData = [];
@@ -104,6 +104,9 @@ export default {
                 data: [],
             };
             this.content.forEach((item) => {
+                if (item.videos.length) {
+                    totalRules++;
+                }
                 totalPoints = totalPoints + item.videos.length;
                 pieChartData.push({
                     name: item.rule_name,
@@ -112,6 +115,7 @@ export default {
                 barChartData["categories"].push(item.rule_name);
                 barChartData["data"].push(item.videos.length);
             });
+            this.totalRules = totalRules;
             this.totalPoints = totalPoints;
             this.pieChartData = pieChartData;
             this.barChartData = barChartData;

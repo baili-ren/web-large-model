@@ -55,7 +55,7 @@ const answer = Mock.mock({
                 ]
             }
         ],
-        template: "online"
+        template: "database"
     }
 });
 

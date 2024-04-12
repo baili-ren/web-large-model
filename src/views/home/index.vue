@@ -14,20 +14,20 @@
                 <div class="title">监管条例细则展示</div>
                 <meg-input
                     v-model="searchKey"
-                    placeholder="搜索历史记录"
-                    @pressEnter="handleSearch"
+                    placeholder="搜索条例"
+                    @pressEnter="handleSearchRules"
                 >
                     <img
                         slot="suffix"
                         class="search-icon"
                         src="@/assets/search.svg"
                         alt=""
-                        @click="handleSearch"
+                        @click="handleSearchRules"
                     />
                 </meg-input>
                 <div class="rules-content">
                     <div
-                        v-for="(item, index) in ruleList"
+                        v-for="(item, index) in filterRules"
                         :key="index + 'rule'"
                         class="content-item"
                         :title="item"
@@ -73,8 +73,10 @@ export default {
     },
     computed: {
         // TODO: 重新上传文件后，条例
-        fliterRules() {
-            return this.ruleList;
+        filterRules() {
+            return this.ruleList.filter((str) => {
+                return str.includes(this.searchKey);
+            });
         },
     },
     mounted() {
@@ -104,7 +106,7 @@ export default {
             this.ruleList.splice(index, 1);
         },
 
-        handleSearch() {
+        handleSearchRules() {
             console.log(this.searchKey, "key===");
         },
     },
