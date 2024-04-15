@@ -2,8 +2,8 @@
     <div class="home-wrapper">
         <div class="home-header">
             <div class="left">
-                <span class="title">视联网监管大模型</span>
-                <span class="info">芯片：昇腾910B I 模型参数量：百亿</span>
+                <span class="title">云南省明厨亮灶AI智能体</span>
+                <!-- <span class="info">芯片：昇腾910B I 模型参数量：百亿</span> -->
             </div>
             <div class="right">
                 <img class="user-img" src="@/assets/user.png" alt="" />

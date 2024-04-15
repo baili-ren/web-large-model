@@ -70,7 +70,10 @@ export default {
                 fileName: file.name,
                 fileSize: (file.size / (1024 * 1024)).toFixed(2),
             });
-            this.updateRules();
+            setTimeout(()=> {
+                this.updateRules();
+            }, 2000)
+
             this.uploadFile(file);
         },
         uploadFile(file) {

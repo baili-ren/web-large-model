@@ -1,5 +1,3 @@
-import { template } from 'lodash';
-
 const Mock = require('mockjs');
 
 const answer = Mock.mock({
