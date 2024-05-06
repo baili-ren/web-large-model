@@ -24,6 +24,7 @@ export default defineConfig({
         port: 3000,
         open: true,
         cors: true,
+        hmr: true,
         proxy: {
             "/api": {
                 target: 'http://60.205.182.37:8000',

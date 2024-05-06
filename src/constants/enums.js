@@ -14,3 +14,10 @@ export const fileNameMap =
         '测试条例2',
     ]
 }
+
+export const ModelType = {
+    senmantics: "senmantics", // 图像语义识别
+    scene: "scene", // 图像场景识别
+    structure: "structure", // 图像结构化分析
+    video: "video", // 视频检索
+}
