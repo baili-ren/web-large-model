@@ -10,7 +10,7 @@
         </div>
         <router-view />
         <div class="footer">
-            <img class="logo" src="@/assets/logo.png" alt="" />
+            <img class="logo" src="@/assets/customer-logo.png" alt="" />
         </div>
     </div>
 </template>

@@ -1,0 +1,66 @@
+.file-upload-wrapper {
+    display: flex;
+    align-items: flex-start;
+
+    .upload-btn {
+        width: 196px;
+        border: none;
+        background: linear-gradient(134deg, #739af6 0%, #3364f7 100%);
+
+        ::v-deep .meg-button-words {
+            font-weight: 500;
+        }
+    }
+
+    .file-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .file-info {
+        height: 36px;
+        max-width: 196px;
+        padding: 0 12px;
+        display: flex;
+        align-items: center;
+        background: #F5F7FA;
+        border-radius: 18px;
+
+        .name {
+            max-width: 108px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+
+            font-family: PingFangSC-Semibold;
+            font-size: 14px;
+            color: #3E4A54;
+            font-weight: 500;
+        }
+
+        .view-btn {
+            margin: 0 10px;
+            color: #4D78F7;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        .close-btn {
+            width: 16px;
+            height: 16px;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+    }
+
+    .progress {
+        margin-left: 20px;
+    }
+}

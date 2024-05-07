@@ -1,6 +1,7 @@
 <template>
-    <div class="tabs">
+    <div>
         <PageTabs
+            class="tabs"
             :tabConfig="tabConfig"
             :defaultKey="defaultTabKey"
             @tabChange="hanleTabChange"
@@ -50,7 +51,7 @@ export default {
                 },
             ],
             defaultTabKey: "",
-            modelType: "",
+            modelType: "", // 大模型场景
         };
     },
     mounted() {

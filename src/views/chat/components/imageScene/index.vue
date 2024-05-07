@@ -1,13 +1,21 @@
 <template>
-    <div>语义识别</div>
+    <div>
+        <ChatBox class="chat-box" />
+    </div>
 </template>
 
 <script>
+import ChatBox from "@/components/chatBox";
+
 export default {
-    name: " ",
+    components: {
+        ChatBox,
+    },
     data() {
         return {};
     },
 };
 </script>
-<style scoped></style>
+<style lang="scss" scoped>
+@import "./index.scss";
+</style>

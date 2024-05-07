@@ -1,0 +1,196 @@
+.chat-box-wrapper {
+    width: calc(100vw - 270px);
+    height: calc(100vh - 142px);
+    min-width: 860px;
+    display: flex;
+    flex-direction: column;
+
+    .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding-right: 308px;
+
+        &-user {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            margin-bottom: 25px;
+
+            .user-avatar {
+                width: 26px;
+                height: 26px;
+                padding: 4px;
+                margin-right: 12px;
+                background-color: #fff;
+                border-radius: 50%;
+            }
+
+            .message-content {
+                // flex: 1;
+            }
+
+            .message-content-full-width {
+                flex: 1;
+            }
+
+            .message-text {
+                padding-bottom: 8px;
+                border-radius: 8px;
+                font-size: 16px;
+                color: #3E4A54;
+                text-align: left;
+                font-weight: 400;
+                word-wrap: break-word;
+                white-space: pre-wrap;
+            }
+        }
+
+        &-robot {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            margin-bottom: 25px;
+
+            .robot-avatar {
+                width: 26px;
+                height: 26px;
+                border-radius: 8px;
+                margin-right: 12px;
+            }
+
+            .message-content {
+                // flex: 1;
+            }
+
+            .message-content-full-width {
+                flex: 1;
+            }
+
+            .message-loading {
+                display: flex;
+                padding: 16px 24px;
+                background-color: #fff;
+                border-radius: 8px;
+                font-size: 16px;
+                color: #3E4A54;
+                text-align: left;
+
+                word-wrap: break-word;
+
+                .loading-text {
+                    margin-right: 12px;
+                }
+            }
+
+            .message-text {
+                padding: 16px 24px;
+                background-color: #fff;
+                border-radius: 8px;
+                font-size: 16px;
+                color: #3E4A54;
+                text-align: left;
+                font-weight: 400;
+                word-wrap: break-word;
+            }
+        }
+
+
+
+        .message-image {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+    }
+
+    .input-box {
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        margin-left: 38px;
+        margin-right: 308px;
+        background-color: #fff;
+        box-shadow: 0px 4px 12px 0px rgba(58, 63, 74, 0.06);
+
+        .input-field {
+            width: 100%;
+            border: none;
+            resize: none;
+            overflow-y: hidden;
+            box-sizing: border-box;
+            border-radius: 5px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .input-field-scroll {
+            overflow-y: auto;
+        }
+
+        .operation {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            // height: 50px;
+
+            .upload-btn {
+                width: 20px;
+                height: 16px;
+                opacity: 0.7;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+            .send-btn {
+                width: 50px;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+
+    }
+
+
+    .loading-dots-box {
+        display: flex;
+        align-items: center;
+
+        .loading-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #3E4A54;
+            margin-right: 8px;
+            animation: loading-animation 1s infinite;
+        }
+
+        .loading-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes loading-animation {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+        }
+    }
+}

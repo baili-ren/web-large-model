@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import { ModelType } from "@/constants/enums";
 export default {
     name: "PageTabs",
     props: {
@@ -29,7 +28,14 @@ export default {
         },
         defaultKey: {
             type: String,
-            default: ModelType.senmantics,
+            default: "",
+        },
+    },
+    watch: {
+        defaultKey(n) {
+            this.tabKey = n;
+            this.lineWidth =
+                this.$refs[`tab-${n}`][0].offsetWidth + "px" || "64px";
         },
     },
     data() {
@@ -38,14 +44,7 @@ export default {
             lineWidth: null,
         };
     },
-    mounted() {
-        this.$nextTick(() => {
-            this.tabKey = this.defaultKey;
-            this.lineWidth =
-                this.$refs[`tab-${this.defaultKey}`][0].offsetWidth + "px" ||
-                "64px";
-        });
-    },
+    mounted() {},
     methods: {
         handleTabsChange(v) {
             this.tabKey = v;
