@@ -43,6 +43,33 @@
                 word-wrap: break-word;
                 white-space: pre-wrap;
             }
+
+            .message-images-text {
+                padding-bottom: 8px;
+                border-radius: 8px;
+
+                .images {
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    .input-image {
+                        height: 180px;
+                        width: auto;
+                        margin-right: 10px;
+                        margin-bottom: 10px;
+                        border-radius: 8px;
+                    }
+                }
+
+                .text {
+                    font-size: 16px;
+                    color: #3E4A54;
+                    text-align: left;
+                    font-weight: 400;
+                    word-wrap: break-word;
+                    white-space: pre-wrap;
+                }
+            }
         }
 
         &-robot {
@@ -78,6 +105,7 @@
                 word-wrap: break-word;
 
                 .loading-text {
+                    font-size: 16px;
                     margin-right: 12px;
                 }
             }
@@ -91,6 +119,38 @@
                 text-align: left;
                 font-weight: 400;
                 word-wrap: break-word;
+            }
+
+            .message-images-text {
+                padding-bottom: 8px;
+                border-radius: 8px;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: flex-end;
+
+                .image-text {
+                    margin-right: 10px;
+                    margin-bottom: 10px;
+
+
+                    .output-image {
+                        height: 180px;
+                        width: auto;
+                        border-radius: 8px;
+                    }
+
+                    .text {
+                        margin-top: 10px;
+                        font-size: 16px;
+                        color: #3E4A54;
+                        text-align: left;
+                        font-weight: 400;
+                        word-wrap: break-word;
+                        white-space: pre-wrap;
+                    }
+                }
+
+
             }
         }
 

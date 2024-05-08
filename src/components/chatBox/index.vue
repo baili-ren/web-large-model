@@ -13,11 +13,27 @@
                             {{ message.content }}
                         </div>
                         <img
-                            v-else
+                            v-if="message.type === 'image'"
                             :src="message.content"
                             class="message-image"
                             alt="Image"
                         />
+                        <div
+                            v-if="message.type === 'imagesAndText'"
+                            class="message-images-text"
+                        >
+                            <div class="images">
+                                <img
+                                    v-for="(image, index) in message.content
+                                        .images"
+                                    class="input-image"
+                                    :key="index + 'img'"
+                                    :src="image"
+                                    alt=""
+                                />
+                            </div>
+                            <div class="text">{{ message.content.text }}</div>
+                        </div>
                     </div>
                 </div>
 
@@ -62,6 +78,25 @@
                             class="message-image"
                             alt="Image"
                         />
+
+                        <div
+                            v-if="message.type === 'imagesAndText'"
+                            class="message-images-text"
+                        >
+                            <div
+                                class="image-text"
+                                v-for="(item, index) in message.content"
+                                :key="index + 'image-text'"
+                            >
+                                <img
+                                    class="output-image"
+                                    :src="item.image"
+                                    alt=""
+                                />
+                                <div class="text">{{ item.text }}</div>
+                            </div>
+                        </div>
+
                         <TemplateDatabase
                             :content="message.content"
                             v-if="message.type === 'database'"
@@ -116,6 +151,8 @@
 <script>
 import TemplateDatabase from "./components/templateDatabase";
 import TemplateOnline from "./components/templateOnline";
+import { ModelType } from "@/constants/enums";
+import structureImage from "@/assets/structureAnswer.png";
 
 export default {
     components: {
@@ -127,6 +164,10 @@ export default {
             type: Array,
             default: () => [],
         },
+        firstMessage: {
+            type: String,
+            default: "hello",
+        },
     },
     data() {
         return {
@@ -135,11 +176,12 @@ export default {
             maxHeight: "150px", // 最大高度
             inputHeight: "50px", // 初始高度
             messages: [
-                // type: text , image, chart
+                // type: text, image, database, online, imagesAndText
                 // { content: "Hello", type: "text", sender: "me" },
                 // { content: "Hi,there!", type: "text", sender: "other" },
                 // { content: [], type: "database", sender: "other" },
                 // { content: [], type: "online", sender: "other" },
+                // { content: [], type: "imagesAndText", sender: "other" },
             ],
             editorOption: {
                 theme: "bubble",
@@ -148,10 +190,31 @@ export default {
             loadingDots: "",
         };
     },
+    computed: {
+        modelType() {
+            const { modelType = ModelType.senmantics } = this.$route.query;
+            return modelType;
+        },
+    },
     mounted() {
         this.scrollToBottom();
+        this.initMessages();
     },
     methods: {
+        initMessages() {
+            const message = {
+                content: this.firstMessage,
+                type: "text",
+                sender: "other",
+            };
+            this.messages.push(message);
+        },
+        scrollToBottom() {
+            this.$refs.messagesEnd.scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+            });
+        },
         adjustInputHeight() {
             const input = this.$refs.inputField;
             input.style.height = this.minHeight;
@@ -160,6 +223,77 @@ export default {
             this.inputHeight = input.style.height;
         },
         async sendMessage() {
+            switch (this.modelType) {
+                case ModelType.senmantics:
+                    await this.fakeChat();
+                    break;
+                case ModelType.scene:
+                    await this.fakeChat();
+                    break;
+                case ModelType.structure:
+                    await this.fakeChat();
+                    break;
+                case ModelType.video:
+                    await this.videoChat();
+                    break;
+                default:
+                    break;
+            }
+        },
+        openFilePicker() {
+            this.$refs.fileInput.click();
+        },
+        handleFileUpload(event) {
+            if (this.loading) {
+                return;
+            }
+            const files = event.target.files;
+            if (files && files.length > 0) {
+                const imagePromises = [];
+                Array.from(files).forEach((file) => {
+                    if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
+                        const promise = new Promise((resolve, reject) => {
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                                resolve(reader.result);
+                            };
+                            reader.readAsDataURL(file);
+                        });
+                        imagePromises.push(promise);
+                    }
+                });
+
+                Promise.all(imagePromises).then((imageList) => {
+                    switch (this.modelType) {
+                        case ModelType.senmantics:
+                            this.senmanticsChatImages(imageList);
+                            break;
+                        case ModelType.scene:
+                            this.sceneChatImages(imageList);
+                            break;
+                        case ModelType.structure:
+                            this.structureChatImages(imageList);
+                            break;
+                        case ModelType.video:
+                            this.videoChatImages(imageList);
+                            break;
+                        default:
+                            break;
+                    }
+                });
+            }
+        },
+
+        // 语义识别
+        async senmanticsChat() {},
+        // 场景识别
+        async sceneChat() {},
+        // 结构化分析
+        async structureChat() {},
+        // 结构化分析
+        async structureChat() {},
+        // 视频检索
+        async videoChat() {
             if (this.currentMessage === "" || this.loading) {
                 return;
             }
@@ -167,7 +301,6 @@ export default {
             this.currentMessage = "";
             this.inputHeight = "50px";
             setTimeout(() => this.scrollToBottom(), 100);
-
             this.messages.push({
                 content: currentMessage,
                 type: "text",
@@ -182,24 +315,24 @@ export default {
             });
 
             try {
-                // const res = await this.$axios({
-                //     method: "post",
-                //     url: "/api",
-                //     data: {
-                //         origin_rules: this.rules,
-                //         usr_question: currentMessage,
-                //     },
-                // });
-
-                // mock test
                 const res = await this.$axios({
                     method: "post",
-                    url: "/web-mock/question",
+                    url: "/kitchen",
                     data: {
                         origin_rules: this.rules,
                         usr_question: currentMessage,
                     },
                 });
+
+                // mock test
+                // const res = await this.$axios({
+                //     method: "post",
+                //     url: "/web-mock/question",
+                //     data: {
+                //         origin_rules: this.rules,
+                //         usr_question: currentMessage,
+                //     },
+                // });
 
                 console.log(res.data, "res===");
 
@@ -248,35 +381,288 @@ export default {
                 this.loading = false;
             }
         },
-        openFilePicker() {
-            this.$refs.fileInput.click();
-        },
-        handleFileUpload(event) {
-            if (this.loading) {
+
+        async fakeChat() {
+            if (this.currentMessage === "" || this.loading) {
                 return;
             }
-            const file = event.target.files[0];
-            console.log(event.target.files, "99999");
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    this.messages.push({
-                        content: reader.result,
-                        type: "image",
-                        sender: "me",
-                    });
+            const currentMessage = this.currentMessage.trim();
+            this.currentMessage = "";
+            this.inputHeight = "50px";
+            setTimeout(() => this.scrollToBottom(), 100);
+            this.messages.push({
+                content: currentMessage,
+                type: "text",
+                sender: "me",
+            });
 
-                    console.log(reader.result, "reader.result===");
-                    setTimeout(() => this.scrollToBottom(), 100);
+            this.loading = true;
+            this.messages.push({
+                content: "分析中, 请稍后",
+                type: "loading",
+                sender: "other",
+            });
+
+            setTimeout(() => {
+                const loadingIndex = this.messages.findIndex(
+                    (msg) => msg.type === "loading"
+                );
+                if (loadingIndex !== -1) {
+                    this.messages.splice(loadingIndex, 1);
+                }
+                this.messages.push({
+                    content: "分析失败，请重试",
+                    type: "text",
+                    sender: "other",
+                });
+                this.loading = false;
+            }, 2000);
+        },
+
+        async senmanticsChatImages(imageList) {
+            if (imageList.length <= 0) {
+                return;
+            }
+            this.messages.push({
+                content: {
+                    images: imageList,
+                    text: "描述图片内容",
+                },
+                type: "imagesAndText",
+                sender: "me",
+            });
+            this.scrollToBottom();
+
+            this.loading = true;
+            this.messages.push({
+                content: "分析中, 请稍后",
+                type: "loading",
+                sender: "other",
+            });
+
+            const inputImgs = imageList.map((item) => {
+                return item.split(",")[1];
+            });
+
+            try {
+                // const res = await this.$axios({
+                //     method: "post",
+                //     url: "/description",
+                //     data: {
+                //         input_img: inputImgs,
+                //     },
+                // });
+
+                // mock test
+                const res = await this.$axios({
+                    method: "post",
+                    url: "/web-mock/description",
+                    data: {
+                        input_img: inputImgs,
+                    },
+                });
+
+                console.log(res.data, "res===");
+                const answerText = res.data.answer || [];
+
+                let answer = {};
+
+                let content = [];
+                for (let i = 0; i < imageList.length; i++) {
+                    content.push({
+                        image: imageList[i],
+                        text: answerText[i] || "",
+                    });
+                }
+                answer = {
+                    content: content,
+                    type: "imagesAndText",
+                    sender: "other",
                 };
-                reader.readAsDataURL(file);
+
+                const loadingIndex = this.messages.findIndex(
+                    (msg) => msg.type === "loading"
+                );
+                if (loadingIndex !== -1) {
+                    this.messages.splice(loadingIndex, 1, answer);
+                }
+            } catch (error) {
+                console.error("失败：", error);
+                const loadingIndex = this.messages.findIndex(
+                    (msg) => msg.type === "loading"
+                );
+                if (loadingIndex !== -1) {
+                    this.messages.splice(loadingIndex, 1);
+                }
+
+                this.messages.push({
+                    content: "分析失败，请重试",
+                    type: "text",
+                    sender: "other",
+                });
+            } finally {
+                this.loading = false;
             }
         },
-        scrollToBottom() {
-            this.$refs.messagesEnd.scrollIntoView({
-                behavior: "smooth",
-                block: "end",
+
+        async sceneChatImages(imageList) {
+            if (imageList.length > 0) {
+                this.messages.push({
+                    content: {
+                        images: imageList,
+                        text: "描述上传图片场景",
+                    },
+                    type: "imagesAndText",
+                    sender: "me",
+                });
+                this.scrollToBottom();
+            }
+
+            this.loading = true;
+            this.messages.push({
+                content: "分析中, 请稍后",
+                type: "loading",
+                sender: "other",
             });
+
+            const inputImgs = imageList.map((item) => {
+                return item.split(",")[1];
+            });
+
+            try {
+                // const res = await this.$axios({
+                //     method: "post",
+                //     url: "/scene",
+                //     data: {
+                //         input_img: inputImgs,
+                //     },
+                // });
+
+                // mock test
+                const res = await this.$axios({
+                    method: "post",
+                    url: "/web-mock/scene",
+                    data: {
+                        input_img: inputImgs,
+                    },
+                });
+
+                console.log(res.data, "res===");
+                const answerText = res.data.answer || [];
+
+                let answer = {};
+
+                let content = [];
+                for (let i = 0; i < imageList.length; i++) {
+                    content.push({
+                        image: imageList[i],
+                        text: answerText[i] || "",
+                    });
+                }
+                answer = {
+                    content: content,
+                    type: "imagesAndText",
+                    sender: "other",
+                };
+
+                const loadingIndex = this.messages.findIndex(
+                    (msg) => msg.type === "loading"
+                );
+                if (loadingIndex !== -1) {
+                    this.messages.splice(loadingIndex, 1, answer);
+                }
+            } catch (error) {
+                console.error("失败：", error);
+                const loadingIndex = this.messages.findIndex(
+                    (msg) => msg.type === "loading"
+                );
+                if (loadingIndex !== -1) {
+                    this.messages.splice(loadingIndex, 1);
+                }
+
+                this.messages.push({
+                    content: "分析失败，请重试",
+                    type: "text",
+                    sender: "other",
+                });
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        async structureChatImages(imageList) {
+            if (imageList.length > 0) {
+                this.messages.push({
+                    content: {
+                        images: imageList,
+                        text: "上传图片，对图像进行结构化分析",
+                    },
+                    type: "imagesAndText",
+                    sender: "me",
+                });
+                this.scrollToBottom();
+            }
+            this.loading = true;
+            this.messages.push({
+                content: "分析中, 请稍后",
+                type: "loading",
+                sender: "other",
+            });
+
+            setTimeout(() => {
+                const loadingIndex = this.messages.findIndex(
+                    (msg) => msg.type === "loading"
+                );
+                if (loadingIndex !== -1) {
+                    this.messages.splice(loadingIndex, 1);
+                }
+                this.messages.push({
+                    content: [
+                        {
+                            image: structureImage,
+                            text: "该图片展示了对应检测分割结果，请查看",
+                        },
+                    ],
+                    type: "imagesAndText",
+                    sender: "other",
+                });
+                this.loading = false;
+            }, 2000);
+        },
+
+        videoChatImages(imageList) {
+            if (imageList.length > 0) {
+                this.messages.push({
+                    content: {
+                        images: imageList,
+                        text: "",
+                    },
+                    type: "imagesAndText",
+                    sender: "me",
+                });
+                this.scrollToBottom();
+            }
+            this.loading = true;
+            this.messages.push({
+                content: "分析中, 请稍后",
+                type: "loading",
+                sender: "other",
+            });
+
+            setTimeout(() => {
+                const loadingIndex = this.messages.findIndex(
+                    (msg) => msg.type === "loading"
+                );
+                if (loadingIndex !== -1) {
+                    this.messages.splice(loadingIndex, 1);
+                }
+                this.messages.push({
+                    content: "分析失败，请重试",
+                    type: "text",
+                    sender: "other",
+                });
+                this.loading = false;
+            }, 2000);
         },
     },
 };

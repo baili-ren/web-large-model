@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ChatBox class="chat-box" />
+        <ChatBox :firstMessage="firstMessage" class="chat-box" />
     </div>
 </template>
 
@@ -12,7 +12,9 @@ export default {
         ChatBox,
     },
     data() {
-        return {};
+        return {
+            firstMessage: "这里是场景识别，欢迎提问",
+        };
     },
 };
 </script>

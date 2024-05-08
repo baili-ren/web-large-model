@@ -51,20 +51,23 @@ export default {
                 },
             ],
             defaultTabKey: "",
-            modelType: "", // 大模型场景
         };
+    },
+    computed: {
+        modelType() {
+            const { modelType = ModelType.senmantics } = this.$route.query;
+            return modelType;
+        },
     },
     mounted() {
         const { modelType = ModelType.senmantics } = this.$route.query;
-        this.modelType = modelType;
         this.defaultTabKey = modelType;
     },
     methods: {
         hanleTabChange(v) {
-            this.modelType = v;
             this.$router.replace({
                 query: {
-                    modelType: this.modelType,
+                    modelType: v,
                 },
             });
         },

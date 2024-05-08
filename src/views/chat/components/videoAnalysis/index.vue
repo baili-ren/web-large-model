@@ -35,7 +35,11 @@
                 </div>
             </div>
         </div>
-        <ChatBox class="chat-box" :rules="ruleList" />
+        <ChatBox
+            class="chat-box"
+            :rules="ruleList"
+            :firstMessage="firstMessage"
+        />
     </div>
 </template>
 
@@ -52,6 +56,7 @@ export default {
         return {
             ruleList: [],
             searchKey: "",
+            firstMessage: "这里是视频检索，欢迎提问",
         };
     },
     computed: {

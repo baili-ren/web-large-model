@@ -183,7 +183,7 @@ export default {
             try {
                 const res = await this.$axios({
                     method: "post",
-                    url: "/api",
+                    url: "/kitchen",
                     data: {
                         origin_rules: this.rules,
                         usr_question: currentMessage,
