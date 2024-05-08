@@ -17,6 +17,7 @@
                             :src="message.content"
                             class="message-image"
                             alt="Image"
+                            @click="handleZoomImg(message.content)"
                         />
                         <div
                             v-if="message.type === 'imagesAndText'"
@@ -30,6 +31,7 @@
                                     :key="index + 'img'"
                                     :src="image"
                                     alt=""
+                                    @click="handleZoomImg(image)"
                                 />
                             </div>
                             <div class="text">{{ message.content.text }}</div>
@@ -77,6 +79,7 @@
                             :src="message.content"
                             class="message-image"
                             alt="Image"
+                            @click="handleZoomImg(message.content)"
                         />
 
                         <div
@@ -92,6 +95,7 @@
                                     class="output-image"
                                     :src="item.image"
                                     alt=""
+                                    @click="handleZoomImg(item.image)"
                                 />
                                 <div class="text">{{ item.text }}</div>
                             </div>
@@ -145,6 +149,16 @@
                 multiple
             />
         </div>
+
+        <div v-if="showImgMask" class="zoom-img-mask" @click="closeImgMask">
+            <img
+                class="close-icon"
+                src="@/assets/close2.png"
+                alt=""
+                @click="closeImgMask"
+            />
+            <img class="zoom-img" :src="currZooImg" alt="" />
+        </div>
     </div>
 </template>
 
@@ -188,6 +202,8 @@ export default {
             },
             loading: false,
             loadingDots: "",
+            showImgMask: false,
+            currZooImg: null,
         };
     },
     computed: {
@@ -222,6 +238,17 @@ export default {
                 Math.min(input.scrollHeight, parseInt(this.maxHeight)) + "px";
             this.inputHeight = input.style.height;
         },
+
+        handleZoomImg(img) {
+            this.showImgMask = true;
+            this.currZooImg = img;
+            console.log(this.currZooImg, "img");
+        },
+        closeImgMask() {
+            this.showImgMask = false;
+            this.currZooImg = "";
+        },
+
         async sendMessage() {
             switch (this.modelType) {
                 case ModelType.senmantics:
@@ -445,22 +472,22 @@ export default {
             });
 
             try {
-                // const res = await this.$axios({
-                //     method: "post",
-                //     url: "/description",
-                //     data: {
-                //         input_img: inputImgs,
-                //     },
-                // });
-
-                // mock test
                 const res = await this.$axios({
                     method: "post",
-                    url: "/web-mock/description",
+                    url: "/description",
                     data: {
                         input_img: inputImgs,
                     },
                 });
+
+                // mock test
+                // const res = await this.$axios({
+                //     method: "post",
+                //     url: "/web-mock/description",
+                //     data: {
+                //         input_img: inputImgs,
+                //     },
+                // });
 
                 console.log(res.data, "res===");
                 const answerText = res.data.answer || [];
@@ -530,22 +557,22 @@ export default {
             });
 
             try {
-                // const res = await this.$axios({
-                //     method: "post",
-                //     url: "/scene",
-                //     data: {
-                //         input_img: inputImgs,
-                //     },
-                // });
-
-                // mock test
                 const res = await this.$axios({
                     method: "post",
-                    url: "/web-mock/scene",
+                    url: "/scene",
                     data: {
                         input_img: inputImgs,
                     },
                 });
+
+                // mock test
+                // const res = await this.$axios({
+                //     method: "post",
+                //     url: "/web-mock/scene",
+                //     data: {
+                //         input_img: inputImgs,
+                //     },
+                // });
 
                 console.log(res.data, "res===");
                 const answerText = res.data.answer || [];
