@@ -1,7 +1,7 @@
 <template>
     <div class="home">
         <div class="welcome-label1">欢迎向我提问</div>
-        <div class="welcome-label2">试试这样问我：</div>
+        <!-- <div class="welcome-label2">试试这样问我：</div> -->
         <div class="modules">
             <div
                 class="card"
@@ -10,7 +10,7 @@
             >
                 <img class="icon" src="@/assets/senmantics.png" alt="" />
                 <div class="title">图像语义识别</div>
-                <div class="des">帮我描述一下画面内容</div>
+                <div class="des">上传图片，并对画面的内容进行描述</div>
             </div>
             <div
                 class="card"
@@ -19,7 +19,7 @@
             >
                 <img class="icon" src="@/assets/scene.png" alt="" />
                 <div class="title">图像场景识别</div>
-                <div class="des">上传多张图片，并对多个图像进行场景分类</div>
+                <div class="des">上传图片，并对图像的场景进行分类</div>
             </div>
             <div
                 class="card"
@@ -37,7 +37,7 @@
             >
                 <img class="icon" src="@/assets/video.png" alt="" />
                 <div class="title">视频检索</div>
-                <div class="des">对视频进行实时检索，快速分析视频片段</div>
+                <div class="des">基于视频内容进行检索和问答对话</div>
             </div>
         </div>
         <div class="operation">

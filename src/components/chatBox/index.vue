@@ -654,7 +654,7 @@ export default {
                     sender: "other",
                 });
                 this.loading = false;
-            }, 2000);
+            }, 6000);
         },
 
         videoChatImages(imageList) {
