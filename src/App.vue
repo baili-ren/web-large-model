@@ -2,7 +2,7 @@
     <div id="app">
         <div class="header">
             <div class="left">
-                <span class="title">视联网监管大模型DEMO</span>
+                <span class="title">视联网监管大模型</span>
             </div>
             <div class="right">
                 <img class="user-img" src="@/assets/user.png" alt="" />
