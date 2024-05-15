@@ -4,7 +4,7 @@
         <div class="summary-title">摘要</div>
         <div class="summary-content">
             <div class="summary-content-des">
-                {{ `一共出现${totalRules}种违规，一共${totalPoints}例` }}
+                {{ `一共出现${totalPoints}例` }}
             </div>
             <div class="summary-content-chart">
                 <div class="pie-chart" ref="barChartRef"></div>
@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <div class="detail-title">违规详情</div>
+        <div class="detail-title">详情</div>
         <div
             v-for="(item, index) in detailData"
             :key="index + 'detail'"

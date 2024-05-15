@@ -2,10 +2,10 @@
     <div class="template-database-wrapper">
         <div class="title">您的问题在线查询结果如下：</div>
         <div class="title">
-            {{ `一共出现${totalRules}种违规，一共${totalPoints}例` }}
+            {{ `一共出现${totalPoints}例` }}
         </div>
 
-        <div v-show="detailData.length" class="detail-title">违规详情</div>
+        <div v-show="detailData.length" class="detail-title">详情</div>
         <div
             v-for="(item, index) in detailData"
             :key="index + 'detail'"
