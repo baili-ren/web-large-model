@@ -26,10 +26,17 @@ export default defineConfig({
         cors: true,
         hmr: true,
         proxy: {
-            "/api": {
+            "/description": {
                 target: 'http://60.205.182.37:8000',
                 changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/api/, '')
+            },
+            "/scene": {
+                target: 'http://60.205.182.37:8000',
+                changeOrigin: true,
+            },
+            "/kitchen": {
+                target: 'http://60.205.182.37:8000',
+                changeOrigin: true,
             },
         },
     },
