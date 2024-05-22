@@ -47,7 +47,7 @@ export default {
                 },
                 {
                     value: ModelType.video,
-                    label: "视频检索",
+                    label: "视频感知",
                 },
             ],
             defaultTabKey: "",

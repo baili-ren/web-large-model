@@ -52,7 +52,7 @@ export default {
             // file: null,
             fileList: [],
             progress: null,
-            action: "https://megdesign-static-dev.mcd.megvii-inc.com/v1/common/upload", //TODO: 记得换
+            action: "https://fakeuploadservice.com/upload", //TODO: 记得换
         };
     },
     computed: {
@@ -75,7 +75,7 @@ export default {
                 this.updateRules();
             }, 2000);
 
-            this.uploadFile(file);
+            // this.uploadFile(file);
         },
         uploadFile(file) {
             let formData = new FormData();

@@ -92,6 +92,7 @@
                                 :key="index + 'image-text'"
                             >
                                 <img
+                                    v-if="item.image"
                                     class="output-image"
                                     :src="item.image"
                                     alt=""
@@ -197,6 +198,16 @@ export default {
                 // { content: [], type: "online", sender: "other" },
                 // { content: [], type: "imagesAndText", sender: "other" },
             ],
+            historyMessages: {
+                inputImgs: [],
+                messages: [
+                    // {content: "描述图片内容", sender: "me"},
+                    // {content: "图片的描述", sender: "other"},
+                    // {content: "问题1", sender: "me"},
+                    // {content: "回答1", sender: "other"},
+                    // {content: "问题2", sender: "me"},
+                ],
+            },
             editorOption: {
                 theme: "bubble",
             },
@@ -252,7 +263,7 @@ export default {
         async sendMessage() {
             switch (this.modelType) {
                 case ModelType.senmantics:
-                    await this.fakeChat();
+                    await this.senmanticsChat();
                     break;
                 case ModelType.scene:
                     await this.fakeChat();
@@ -312,7 +323,105 @@ export default {
         },
 
         // 语义识别
-        async senmanticsChat() {},
+        // 语义识别
+        async senmanticsChat() {
+            if (this.currentMessage === "" || this.loading) {
+                return;
+            }
+
+            if (this.historyMessages.inputImgs.length <= 0) {
+                this.fakeChat();
+                return;
+            }
+
+            const currentMessage = this.currentMessage.trim();
+            this.currentMessage = "";
+            this.inputHeight = "5rem";
+            setTimeout(() => this.scrollToBottom(), 100);
+            this.messages.push({
+                content: currentMessage,
+                type: "text",
+                sender: "me",
+            });
+
+            this.historyMessages.messages.push({
+                content: currentMessage,
+                sender: "me",
+            });
+
+            this.loading = true;
+            this.messages.push({
+                content: "分析中, 请稍后",
+                type: "loading",
+                sender: "other",
+            });
+
+            try {
+                const res = await this.$axios({
+                    method: "post",
+                    url: "/description",
+                    data: {
+                        input_img: this.historyMessages.inputImgs,
+                        messages: this.historyMessages.messages,
+                    },
+                });
+
+                // mock test
+                // const res = await this.$axios({
+                //     method: "post",
+                //     url: "/web-mock/description",
+                //     data: {
+                //         input_img: this.historyMessages.inputImgs,
+                //         message: this.historyMessages.messages,
+                //     },
+                // });
+
+                console.log(res.data, "res===");
+                const answerText = res.data.answer || [];
+
+                this.historyMessages.messages.push({
+                    content: answerText,
+                    sender: "other",
+                });
+
+                let answer = {};
+                let content = [];
+                for (let i = 0; i < answerText.length; i++) {
+                    content.push({
+                        // image: imageList[i],
+                        text: answerText[i] || "",
+                    });
+                }
+                answer = {
+                    content: content,
+                    type: "imagesAndText",
+                    sender: "other",
+                };
+
+                const loadingIndex = this.messages.findIndex(
+                    (msg) => msg.type === "loading"
+                );
+                if (loadingIndex !== -1) {
+                    this.messages.splice(loadingIndex, 1, answer);
+                }
+            } catch (error) {
+                console.error("失败：", error);
+                const loadingIndex = this.messages.findIndex(
+                    (msg) => msg.type === "loading"
+                );
+                if (loadingIndex !== -1) {
+                    this.messages.splice(loadingIndex, 1);
+                }
+
+                this.messages.push({
+                    content: "分析失败，请重试",
+                    type: "text",
+                    sender: "other",
+                });
+            } finally {
+                this.loading = false;
+            }
+        },
         // 场景识别
         async sceneChat() {},
         // 结构化分析
@@ -471,12 +580,18 @@ export default {
                 return item.split(",")[1];
             });
 
+            this.historyMessages = {
+                inputImgs: inputImgs,
+                messages: [],
+            };
+
             try {
                 const res = await this.$axios({
                     method: "post",
                     url: "/description",
                     data: {
-                        input_img: inputImgs,
+                        input_img: this.historyMessages.inputImgs,
+                        messages: this.historyMessages.messages,
                     },
                 });
 
@@ -485,19 +600,24 @@ export default {
                 //     method: "post",
                 //     url: "/web-mock/description",
                 //     data: {
-                //         input_img: inputImgs,
+                //         input_img: this.historyMessages.inputImgs,
+                //         message: this.historyMessages.messages,
                 //     },
                 // });
 
                 console.log(res.data, "res===");
                 const answerText = res.data.answer || [];
 
-                let answer = {};
+                this.historyMessages.messages.push({
+                    content: answerText,
+                    sender: "other",
+                });
 
+                let answer = {};
                 let content = [];
-                for (let i = 0; i < imageList.length; i++) {
+                for (let i = 0; i < answerText.length; i++) {
                     content.push({
-                        image: imageList[i],
+                        // image: imageList[i],
                         text: answerText[i] || "",
                     });
                 }

@@ -36,7 +36,7 @@
                 @click="handleChooseModule(ModelType.video)"
             >
                 <img class="icon" src="@/assets/video.png" alt="" />
-                <div class="title">视频检索</div>
+                <div class="title">视频感知</div>
                 <div class="des">基于视频内容进行检索和问答对话</div>
             </div>
         </div>

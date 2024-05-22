@@ -16,6 +16,10 @@
 </template>
 
 <style lang="scss" scoped>
+#app {
+    min-width: 1300px;
+    overflow-x: hidden;
+}
 .header {
     height: 64px;
     display: flex;
