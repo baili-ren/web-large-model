@@ -12,6 +12,7 @@ export default defineConfig({
             supportTs: false
         })
     ],
+    base: '/web-connect/',
     resolve: {
         extensions: [".js", ".jsx", ".vue", ".json"],
         alias: {
