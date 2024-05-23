@@ -9,7 +9,9 @@ const answer = Mock.mock({
                 'videos': [
                     { 'video_name': '点位5_1.mp4', 'frame': 'yes' },
                     { 'video_name': '点位1_1.mp4', 'frame': 'yes' },
-                    { 'video_name': '点位6_1.mp4', 'frame': 'yes' }
+                    { 'video_name': '点位6_1.mp4', 'frame': 'yes' },
+                    { 'video_name': '点位6_1.mp4', 'frame': 'yes' },
+
                 ]
             },
             {

@@ -3,7 +3,7 @@
     align-items: flex-start;
 
     .upload-btn {
-        width: 196px;
+        width: 100%;
         border: none;
         background: linear-gradient(134deg, #739af6 0%, #3364f7 100%);
 
@@ -16,12 +16,13 @@
         flex: 1;
         display: flex;
         align-items: center;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        width: 100%;
     }
 
     .file-info {
         height: 36px;
-        max-width: 196px;
+        width: 100%;
         padding: 0 12px;
         display: flex;
         align-items: center;
@@ -29,7 +30,7 @@
         border-radius: 18px;
 
         .name {
-            max-width: 108px;
+            max-width: 186px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;

@@ -4,7 +4,7 @@
 
 .left-sider {
     height: calc(100vh - 280px);
-    width: 220px;
+    width: 300px;
     padding: 12px;
     margin-left: 12px;
     overflow-y: hidden;
@@ -39,7 +39,7 @@
         overflow-x: hidden;
 
         .content-item {
-            width: 196px;
+            width: 100%;
             height: 40px;
             display: flex;
             align-items: center;
@@ -55,6 +55,7 @@
             }
 
             .label {
+                width: 100%;
                 color: #3E4A54;
                 overflow: hidden;
                 text-overflow: ellipsis;

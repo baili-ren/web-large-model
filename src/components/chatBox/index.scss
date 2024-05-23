@@ -1,5 +1,5 @@
 .chat-box-wrapper {
-    width: calc(100vw - 270px);
+    width: calc(100vw - 350px);
     height: calc(100vh - 142px);
     min-width: 860px;
     display: flex;
@@ -8,7 +8,7 @@
     .chat-messages {
         flex: 1;
         overflow-y: auto;
-        padding-right: 308px;
+        padding-right: 350px;
 
         &-user {
             display: flex;
@@ -169,7 +169,7 @@
         margin-top: 10px;
         margin-bottom: 20px;
         margin-left: 38px;
-        margin-right: 308px;
+        margin-right: 350px;
         background-color: #fff;
         box-shadow: 0px 4px 12px 0px rgba(58, 63, 74, 0.06);
 
