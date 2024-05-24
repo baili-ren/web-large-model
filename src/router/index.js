@@ -30,7 +30,7 @@ const routes = [
 
 const router = new VueRouter({
     mode: 'history',
-    base: '/web-connect',
+    base: '/gj8VVzu5KeXnGOXF',
     routes
 })
 
