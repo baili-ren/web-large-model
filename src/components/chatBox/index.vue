@@ -98,7 +98,9 @@
                                     alt=""
                                     @click="handleZoomImg(item.image)"
                                 />
-                                <div class="text">{{ item.text }}</div>
+                                <div v-if="item.text" class="text">
+                                    {{ item.text }}
+                                </div>
                             </div>
                         </div>
 
@@ -208,6 +210,7 @@ export default {
                     // {content: "问题2", sender: "me"},
                 ],
             },
+            currStructureImgs: [],
             editorOption: {
                 theme: "bubble",
             },
@@ -269,7 +272,7 @@ export default {
                     await this.fakeChat();
                     break;
                 case ModelType.structure:
-                    await this.fakeChat();
+                    await this.structureChat();
                     break;
                 case ModelType.video:
                     await this.videoChat();
@@ -322,7 +325,6 @@ export default {
             }
         },
 
-        // 语义识别
         // 语义识别
         async senmanticsChat() {
             if (this.currentMessage === "" || this.loading) {
@@ -425,9 +427,100 @@ export default {
         // 场景识别
         async sceneChat() {},
         // 结构化分析
-        async structureChat() {},
-        // 结构化分析
-        async structureChat() {},
+        async structureChat() {
+            if (this.currentMessage === "" || this.loading) {
+                return;
+            }
+
+            if (this.currStructureImgs.length <= 0) {
+                this.fakeChat();
+                return;
+            }
+
+            const currentMessage = this.currentMessage.trim();
+            this.currentMessage = "";
+            this.inputHeight = "5rem";
+            setTimeout(() => this.scrollToBottom(), 100);
+            this.messages.push({
+                content: currentMessage,
+                type: "text",
+                sender: "me",
+            });
+
+            this.loading = true;
+            this.messages.push({
+                content: "分析中, 请稍后",
+                type: "loading",
+                sender: "other",
+            });
+
+            try {
+                const res = await this.$axios({
+                    method: "post",
+                    url: "/detection",
+                    data: {
+                        input_img: this.currStructureImgs,
+                        usr_question: currentMessage,
+                    },
+                });
+
+                // mock test
+                // const res = await this.$axios({
+                //     method: "post",
+                //     url: "/web-mock/structure",
+                //     data: {
+                //         input_img: this.currStructureImgs,
+                //         usr_question: currentMessage,
+                //     },
+                // });
+
+                console.log(res.data, "res===");
+
+                let outImgs = [];
+                if (Array.isArray(res.data.output_img)) {
+                    outImgs = res.data.output_img;
+                }
+                if (typeof res.data.output_img == "string") {
+                    outImgs.push(res.data.output_img);
+                }
+
+                let answer = {};
+                let content = [];
+                for (let i = 0; i < outImgs.length; i++) {
+                    content.push({
+                        image: outImgs[i],
+                    });
+                }
+                answer = {
+                    content: content,
+                    type: "imagesAndText",
+                    sender: "other",
+                };
+
+                const loadingIndex = this.messages.findIndex(
+                    (msg) => msg.type === "loading"
+                );
+                if (loadingIndex !== -1) {
+                    this.messages.splice(loadingIndex, 1, answer);
+                }
+            } catch (error) {
+                console.error("失败：", error);
+                const loadingIndex = this.messages.findIndex(
+                    (msg) => msg.type === "loading"
+                );
+                if (loadingIndex !== -1) {
+                    this.messages.splice(loadingIndex, 1);
+                }
+
+                this.messages.push({
+                    content: "分析失败，请重试",
+                    type: "text",
+                    sender: "other",
+                });
+            } finally {
+                this.loading = false;
+            }
+        },
         // 视频检索
         async videoChat() {
             if (this.currentMessage === "" || this.loading) {
@@ -738,6 +831,20 @@ export default {
         },
 
         async structureChatImages(imageList) {
+            if (imageList.length > 0) {
+                this.messages.push({
+                    content: {
+                        images: imageList,
+                    },
+                    type: "imagesAndText",
+                    sender: "me",
+                });
+                this.scrollToBottom();
+            }
+            this.currStructureImgs = imageList;
+        },
+
+        async structureChatImages2(imageList) {
             if (imageList.length > 0) {
                 this.messages.push({
                     content: {
