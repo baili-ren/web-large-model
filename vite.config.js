@@ -12,7 +12,7 @@ export default defineConfig({
             supportTs: false
         })
     ],
-    base: '/gj8VVzu5KeXnGOXF/',
+    base: '/web-connect/',
     resolve: {
         extensions: [".js", ".jsx", ".vue", ".json"],
         alias: {
@@ -28,15 +28,19 @@ export default defineConfig({
         hmr: true,
         proxy: {
             "/description": {
-                target: 'http://60.205.182.37:8000',
+                target: 'http://10.117.56.224:8000',
                 changeOrigin: true,
             },
             "/scene": {
-                target: 'http://60.205.182.37:8000',
+                target: 'http://10.117.56.224:8000',
                 changeOrigin: true,
             },
             "/kitchen": {
-                target: 'http://60.205.182.37:8000',
+                target: 'http://10.117.56.224:8000',
+                changeOrigin: true,
+            },
+            "/detection": {
+                target: 'http://10.117.56.224:8000',
                 changeOrigin: true,
             },
         },
