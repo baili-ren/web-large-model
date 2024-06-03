@@ -455,12 +455,14 @@ export default {
             });
 
             try {
+                const message = [];
+                message.push(currentMessage);
                 const res = await this.$axios({
                     method: "post",
                     url: "/detection",
                     data: {
                         input_img: this.currStructureImgs,
-                        usr_question: currentMessage,
+                        usr_question: message,
                     },
                 });
 
@@ -470,7 +472,7 @@ export default {
                 //     url: "/web-mock/structure",
                 //     data: {
                 //         input_img: this.currStructureImgs,
-                //         usr_question: currentMessage,
+                //         usr_question: message,
                 //     },
                 // });
 
