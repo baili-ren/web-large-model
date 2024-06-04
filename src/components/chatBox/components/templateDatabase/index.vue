@@ -130,10 +130,10 @@ export default {
         },
         setBarChartData() {
             this.barChart.setOption({
-                yAxis: { data: this.barChartData.categories },
+                yAxis: { data: this.barChartData.categories.toReversed() },
             });
             this.barChart.setOption({
-                series: { data: this.barChartData.data },
+                series: { data: this.barChartData.data.toReversed() },
             });
         },
         setPieChartData() {
