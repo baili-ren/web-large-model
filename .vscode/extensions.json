@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "editorconfig.editorconfig",
+        "octref.vetur",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "abusaidm.html-snippets",
+        "ecmel.vscode-html-css"
+    ]
+}
