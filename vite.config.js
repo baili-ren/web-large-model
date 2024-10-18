@@ -12,11 +12,10 @@ export default defineConfig({
             supportTs: false
         })
     ],
-    base: '/gj8VVzu5KeXnGOXF/',
+    base: '/web-large-model/',
     resolve: {
         extensions: [".js", ".jsx", ".vue", ".json"],
         alias: {
-            'meg-ui': path.resolve(process.cwd(), 'node_modules', 'meg-ui'),
             '@': path.resolve(process.cwd(), './src'),
         },
     },

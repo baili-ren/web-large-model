@@ -41,11 +41,11 @@
             </div>
         </div>
         <div class="operation">
-            <meg-button
+            <el-button
                 class="start-btn"
                 type="primary"
                 @click="startConversation"
-                >开始对话</meg-button
+                >开始对话</el-button
             >
         </div>
     </div>

@@ -3,20 +3,15 @@
         <div class="left-sider">
             <div class="title">条例细则</div>
             <FileUpload @returnRules="returnRules" />
-            <meg-input
+
+            <el-input
                 class="search-input"
                 v-model="searchKey"
                 placeholder="搜索条例"
                 @pressEnter="handleSearchRules"
             >
-                <img
-                    slot="suffix"
-                    class="search-icon"
-                    src="@/assets/search.svg"
-                    alt=""
-                    @click="handleSearchRules"
-                />
-            </meg-input>
+            </el-input>
+
             <div class="rules-content">
                 <div
                     v-for="(item, index) in filterRules"

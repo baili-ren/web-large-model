@@ -6,13 +6,12 @@
             type="file"
             @change="handleFileUpload"
         />
-        <meg-button
+        <el-button
             class="upload-btn"
             type="primary"
-            icon="upload"
             @click="chooseFile"
             v-show="!fileList.length"
-            >上传文件</meg-button
+            >上传文件<i class="el-icon-upload el-icon--right"></i></el-button
         >
         <div class="file-content">
             <div
