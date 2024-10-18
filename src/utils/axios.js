@@ -4,7 +4,8 @@ const AXIOS_DEFAULT_CONFIG = {
     maxContentLength: Infinity,
     headers: {},
     // baseURL: import.meta.env.VITE_APP_ISMOCK_ENV === 'true' ? '' : '/v2/web'
-    baseURL: import.meta.env.DEV ? '' : ""
+    // baseURL: import.meta.env.DEV ? '' : ""
+    baseURL: import.meta.env.VITE_API_BASE_URL
 
 };
 const axiosInstance = axios.create(AXIOS_DEFAULT_CONFIG);
